@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package br.com.precificacao;
+
+service PrecificacaoService {
+  rpc getPrecificacao(PrecificacaoRequest) returns (PrecificacaoResponse){};
+}
+message PrecificacaoRequest {
+  int64 idCliente = 1;
+  string tipoAgrupamentoPrincipal = 2;
+  repeated AgrupamentoClusterRequest agrupamentos = 3;
+}
+
+message AgrupamentoClusterRequest {
+  string tipoAgrupamento = 1;
+  repeated ContratoClusterRequest contratos = 2;
+}
+
+message ContratoClusterRequest {
+  int64 numeroContrato = 1;
+  int64 codigoProduto = 2;
+  double valorContrato = 3;
+  int32 qtdeDiasAtraso = 4;
+}
+
+
+message PrecificacaoResponse {
+  int64 idCliente = 1;
+  string tipoAgrupamentoPrincipal = 2;
+  repeated AgrupamentoClusterResponse agrupamentos = 3;
+}
+
+message AgrupamentoClusterResponse {
+  string tipoAgrupamento = 1;
+  double valorTotal = 2;
+  double valorJurosTotal = 3;
+  repeated ContratoClusterResponse contratos = 4;
+}
+
+message ContratoClusterResponse {
+  int64 numeroContrato = 1;
+  int64 codigoProduto = 2;
+  double valorContratoSemJuros = 3;
+  double percentualJurosMes = 4;
+  double valorJuros = 5;
+  double valorTotalContrato = 6;
+}

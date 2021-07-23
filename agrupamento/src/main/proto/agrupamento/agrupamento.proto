@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package br.com.agrupamento;
+
+service AgrupamentoService {
+  rpc getAgrupamento(AgrupamentoRequest) returns (AgrupamentoResponse){};
+}
+
+message AgrupamentoRequest {
+  int64 idCliente = 1;
+  repeated ContratoRequest contratos = 2;
+}
+
+message ContratoRequest {
+
+  int64 numeroContrato = 1;
+  int64 codigoProduto = 2;
+  double valorContrato = 3;
+  int32 qtdeDiasAtraso = 4;
+
+}
+
+message AgrupamentoResponse {
+  int64 idCliente = 1;
+  string tipoAgrupamentoPrincipal = 2;
+  repeated AgrupamentoClusterResponse agrupamentos = 3;
+}
+
+message AgrupamentoClusterResponse {
+  string tipoAgrupamento = 1;
+  repeated ContratoClusterResponse contratos = 2;
+}
+
+message ContratoClusterResponse {
+  int64 numeroContrato = 1;
+  int64 codigoProduto = 2;
+  double valorContrato = 3;
+  int32 qtdeDiasAtraso = 4;
+}

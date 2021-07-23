@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package br.com.simulacao;
+
+service SimulacaoService {
+  rpc getSimulacaoParcelada(SimulacaoParceladaRequest) returns (SimulacaoParceladaResponse){};
+}
+
+message SimulacaoParceladaRequest {
+  int64 idCliente = 1;
+  string tipoAgrupamentoPrincipal = 2;
+  repeated AgrupamentoClusterRequest agrupamentos = 3;
+}
+
+message AgrupamentoClusterRequest {
+  string tipoAgrupamento = 1;
+  double valorTotal = 2;
+  double valorJurosTotal = 3;
+  repeated ContratoClusterRequest contratos = 4;
+}
+
+message ContratoClusterRequest {
+  int64 numeroContrato = 1;
+  int64 codigoProduto = 2;
+  double valorContratoSemJuros = 3;
+  double percentualJurosMes = 4;
+  double valorJuros = 5;
+  double valorTotalContrato = 6;
+}
+
+
+message SimulacaoParceladaResponse {
+  int64 idCliente = 1;
+  repeated AgrupamentoResponse agrupamentos = 2;
+}
+message AgrupamentoResponse {
+  string tipoAgrupamentoPrincipal = 2;
+  double valorDesconto = 4;
+  double valorTotalSemDesconto = 5;
+  double valorTotalComDesconto = 6;
+  repeated SimulacaoParceladaPlanoResponse planos = 7;
+  repeated SimulacaoParceladaContratoResponse contratos = 8;
+}
+
+message SimulacaoParceladaPlanoResponse {
+    int32 quantidadeParcelasPlano = 1;
+    double valorTotalParcela = 2;
+    double percentualDescontoParcela = 3;
+    double valorDescontoParcela = 4;
+    double valorTotalParcelaComDesconto = 5;
+}
+
+message SimulacaoParceladaContratoResponse {
+  int64 numeroContrato = 1;
+  int64 codigoProduto = 2;
+  double valorContratoSemJuros = 3;
+  double percentualJurosMes = 4;
+  double valorJuros = 5;
+  double valorTotalContrato = 6;
+}

@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+grpc:
+  client:
+    agrupamento-service:
+      address: static://localhost:9091
+      negotiationType: plaintext
+    precificacao-service:
+      address: static://localhost:9092
+      negotiationType: plaintext
+    simulacao-parcelada-service:
+      address: static://localhost:9093
+      negotiationType: plaintext
+  server:
+    port: 9090
