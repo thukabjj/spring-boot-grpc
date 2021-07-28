@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @GrpcService
 public class AgrupamentoService extends AgrupamentoServiceGrpc.AgrupamentoServiceImplBase {
 

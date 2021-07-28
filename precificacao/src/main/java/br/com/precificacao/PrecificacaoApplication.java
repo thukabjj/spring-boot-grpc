@@ -1,13 +1,11 @@
-package br.com;
+package br.com.precificacao;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SimulacaoParceladaApplication {
-
+public class PrecificacaoApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(SimulacaoParceladaApplication.class, args);
+		SpringApplication.run(PrecificacaoApplication.class, args);
 	}
-
 }
