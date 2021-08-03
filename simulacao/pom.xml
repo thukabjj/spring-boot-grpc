@@ -2,17 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-<!--	<parent>-->
-<!--		<groupId>org.springframework.boot</groupId>-->
-<!--		<artifactId>spring-boot-starter-parent</artifactId>-->
-<!--		<version>2.5.3</version>-->
-<!--		<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
-<!--	</parent>-->
+
 	<groupId>br.com.orquestrador</groupId>
 	<artifactId>simulacao</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>simulacao</name>
 	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.3</version>
+		<relativePath/>
+	</parent>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -39,6 +42,16 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.experimental</groupId>
+			<artifactId>spring-native</artifactId>
+			<version>0.10.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.experimental</groupId>
+			<artifactId>spring-native-configuration</artifactId>
+			<version>0.10.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -56,44 +69,19 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-netty</artifactId>
-			<version>${grpc.version}</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>4.0.0-rc-2</version>
 		</dependency>
 		<dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-protobuf</artifactId>
-			<version>${grpc.version}</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>4.0.0-rc-2</version>
 		</dependency>
-		<dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-stub</artifactId>
-			<version>${grpc.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-services</artifactId>
-			<version>${grpc.version}</version>
-		</dependency>
-		<!--        <dependency>-->
-		<!--            <groupId>com.salesforce.servicelibs</groupId>-->
-		<!--            <artifactId>reactor-grpc-stub</artifactId>-->
-		<!--            <version>${reactive-grpc.version}</version>-->
-		<!--        </dependency>-->
 		<dependency>
 			<groupId>net.devh</groupId>
 			<artifactId>grpc-spring-boot-starter</artifactId>
 			<version>2.12.0.RELEASE</version>
-			<exclusions>
-				<exclusion>
-					<groupId>io.grpc</groupId>
-					<artifactId>grpc-netty-shaded</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-tcnative-boringssl-static</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
@@ -120,36 +108,9 @@
 
 	</dependencies>
 
+
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-bom</artifactId>
-				<version>4.1.66.Final</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>com.google.protobuf</groupId>
-				<artifactId>protobuf-bom</artifactId>
-				<version>${protobuf.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-bom</artifactId>
-				<version>${grpc.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring-boot.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
@@ -172,17 +133,46 @@
 		</extensions>
 		<plugins>
 			<plugin>
+				<groupId>org.springframework.experimental</groupId>
+				<artifactId>spring-aot-maven-plugin</artifactId>
+				<version>0.10.3-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>test-generate</id>
+						<goals>
+							<goal>test-generate</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${spring-boot.version}</version>
 				<configuration>
-					<mainClass>br.com.agrupamento.AgrupamentoApplication</mainClass>
+					<mainClass>br.com.orquestrador.SimulacaoApplication</mainClass>
 					<classifier>${classifier}</classifier>
 					<image>
 						<env>
 							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
-							<BP_NATIVE_IMAGE_BUILD_ARGUMENTS>${native.build.args}</BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+							<BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+								--trace-object-instantiation=java.lang.Thread
+								--enable-all-security-services
+								-H:+ReportExceptionStackTraces
+								--trace-class-initialization=jdk.xml.internal.SecuritySupport
+								--trace-class-initialization=javax.xml.parsers.FactoryFinder
+								--verbose
+							</BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
 						</env>
+						<buildpacks>
+							<buildpack>gcr.io/paketo-buildpacks/java-native-image:5.3.0</buildpack>
+						</buildpacks>
 					</image>
 				</configuration>
 			</plugin>
@@ -215,9 +205,9 @@
 				<artifactId>protobuf-maven-plugin</artifactId>
 				<version>${protobuf.plugin.version}</version>
 				<configuration>
-					<protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+					<protocArtifact>com.google.protobuf:protoc:4.0.0-rc-2:exe:${os.detected.classifier}</protocArtifact>
 					<pluginId>grpc-java</pluginId>
-					<pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:1.39.0:exe:${os.detected.classifier}</pluginArtifact>
 				</configuration>
 				<executions>
 					<execution>
@@ -231,98 +221,20 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>native</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.springframework.experimental</groupId>
-					<artifactId>spring-native</artifactId>
-					<version>${spring-native.version}</version>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.experimental</groupId>
-						<artifactId>spring-aot-maven-plugin</artifactId>
-						<version>${spring-native.version}</version>
-						<configuration>
-							<removeSpelSupport>true</removeSpelSupport>
-							<removeYamlSupport>true</removeYamlSupport>
-						</configuration>
-						<executions>
-							<execution>
-								<id>test-generate</id>
-								<goals>
-									<goal>test-generate</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>generate</id>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>0.9.2</version>
-						<configuration>
-							<mainClass>${main.class}</mainClass>
-							<imageName>${project.artifactId}</imageName>
-							<buildArgs>${native.build.args}</buildArgs>
-						</configuration>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<goals>
-									<goal>build</goal>
-								</goals>
-								<phase>package</phase>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-release</id>
-			<name>Spring release</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>spring-snapshot</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 	<repositories>
-		<repository>
-			<id>spring-release</id>
-			<name>Spring release</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+		<!-- ... -->
 		<repository>
 			<id>spring-snapshot</id>
-			<name>Spring Snapshots</name>
+			<name>Spring snapshot</name>
 			<url>https://repo.spring.io/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
 		</repository>
 	</repositories>
+	<pluginRepositories>
+		<!-- ... -->
+		<pluginRepository>
+			<id>spring-snapshot</id>
+			<name>Spring snapshot</name>
+			<url>https://repo.spring.io/snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
